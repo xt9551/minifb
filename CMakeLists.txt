@@ -115,7 +115,7 @@ elseif(UNIX)
         option(USE_OPENGL_API "Build the project using OpenGL API code" ON)
     endif()
 elseif(WIN32)
-    option(USE_OPENGL_API "Build the project using OpenGL API code" ON)
+    option(USE_OPENGL_API "Build the project using OpenGL API code" ON) #MAXT
 endif()
 
 # Set GCC/Clang flags
@@ -143,6 +143,7 @@ if(NOT MSVC)
     #--------------------------------------
     add_compile_options("$<$<CONFIG:Debug>:-g>")
     add_compile_options("$<IF:$<CONFIG:Debug>,-O0,-O2>")
+#    add_compile_options(-m32 -lws2_32 -lwinmm -lpsapi -lpthread -lpsapi -lopengl32) #maxt: 32bit
     add_compile_options(-Wall -Wextra)
     add_compile_options(-Wno-switch -Wno-unused-function -Wno-unused-parameter -Wno-implicit-fallthrough)
 

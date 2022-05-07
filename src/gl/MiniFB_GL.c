@@ -237,7 +237,7 @@ void
 resize_GL(SWindowData *window_data) {
     if (window_data->is_initialized) {
     #if defined(_WIN32) || defined(WIN32)
-
+        fprintf(stdout, "GL resize: %d, %d\n",  window_data->window_width, window_data->window_height);
         SWindowData_Win *window_data_ex = (SWindowData_Win *) window_data->specific;
         wglMakeCurrent(window_data_ex->hdc, window_data_ex->hGLRC);
 

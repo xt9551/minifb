@@ -118,10 +118,10 @@ mfb_get_user_data(struct mfb_window *window) {
 
 // [Deprecated]
 //-------------------------------------
-void
-mfb_get_monitor_dpi(struct mfb_window *window, float *dpi_x, float *dpi_y) {
-    mfb_get_monitor_scale(window, dpi_x, dpi_y);
-}
+//void
+//mfb_get_monitor_dpi(struct mfb_window *window, float *dpi_x, float *dpi_y) {
+//    mfb_get_monitor_scale(window, dpi_x, dpi_y);
+//}
 
 //-------------------------------------
 void

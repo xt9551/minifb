@@ -327,6 +327,9 @@ WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
                 window_data->mod_keys   = translate_mod();
                 int          is_pressed = 0;
                 switch(message) {
+                case WM_LBUTTONDBLCLK: //maxt:
+                        button = MOUSE_LEFT_DBCLK;
+                        break;
                 case WM_LBUTTONDOWN:
                     is_pressed = 1;
                 case WM_LBUTTONUP:
@@ -392,6 +395,10 @@ WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
             if (window_data) {
                 window_data_win->mouse_inside = false;
             }
+            break;
+
+        case WM_SIZING:
+            printf("sizing\n");
             break;
 
         case WM_SIZE:
@@ -471,20 +478,21 @@ mfb_open_ex(const char *title, unsigned width, unsigned height, unsigned flags) 
 
     window_data->buffer_width  = width;
     window_data->buffer_height = height;
-    window_data->buffer_stride = width * 4;
+    window_data->buffer_stride = width * 3;
 
     s_window_style = WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME;
     if (flags & WF_FULLSCREEN) {
         flags = WF_FULLSCREEN;  // Remove all other flags
         rect.right  = GetSystemMetrics(SM_CXSCREEN);
         rect.bottom = GetSystemMetrics(SM_CYSCREEN);
-        s_window_style = WS_POPUP & ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZE | WS_MAXIMIZE | WS_SYSMENU);
+        s_window_style = //WS_POPUP & ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZE | WS_MAXIMIZE | WS_SYSMENU);
+                WS_POPUP & ~(WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
 
         DEVMODE settings = { 0 };
         EnumDisplaySettings(0, 0, &settings);
         settings.dmPelsWidth  = GetSystemMetrics(SM_CXSCREEN);
         settings.dmPelsHeight = GetSystemMetrics(SM_CYSCREEN);
-        settings.dmBitsPerPel = 32;
+        settings.dmBitsPerPel = 24;//32;
         settings.dmFields     = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
         if (ChangeDisplaySettings(&settings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
@@ -497,7 +505,7 @@ mfb_open_ex(const char *title, unsigned width, unsigned height, unsigned flags) 
     }
 
     if (flags & WF_RESIZABLE) {
-        s_window_style |= WS_MAXIMIZEBOX | WS_SIZEBOX;
+//        s_window_style |= WS_MAXIMIZEBOX | WS_SIZEBOX;
     }
 
     if (flags & WF_FULLSCREEN_DESKTOP) {
@@ -582,8 +590,8 @@ mfb_open_ex(const char *title, unsigned width, unsigned height, unsigned flags) 
 
     window_data_win->bitmapInfo->bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
     window_data_win->bitmapInfo->bmiHeader.biPlanes      = 1;
-    window_data_win->bitmapInfo->bmiHeader.biBitCount    = 32;
-    window_data_win->bitmapInfo->bmiHeader.biCompression = BI_BITFIELDS;
+    window_data_win->bitmapInfo->bmiHeader.biBitCount    = 24;//32;
+    window_data_win->bitmapInfo->bmiHeader.biCompression = BI_RGB;//BI_BITFIELDS;
     window_data_win->bitmapInfo->bmiHeader.biWidth       = window_data->buffer_width;
     window_data_win->bitmapInfo->bmiHeader.biHeight      = -(LONG)window_data->buffer_height;
     window_data_win->bitmapInfo->bmiColors[0].rgbRed     = 0xff;
@@ -634,7 +642,7 @@ mfb_update_ex(struct mfb_window *window, void *buffer, unsigned width, unsigned 
 
     window_data->draw_buffer   = buffer;
     window_data->buffer_width  = width;
-    window_data->buffer_stride = width * 4;
+    window_data->buffer_stride = width * 3;//4;
     window_data->buffer_height = height;
 
     SWindowData_Win *window_data_win = (SWindowData_Win *) window_data->specific;

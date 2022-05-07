@@ -21,6 +21,7 @@ typedef enum {
     MOUSE_BTN_5,
     MOUSE_BTN_6,
     MOUSE_BTN_7,
+    MOUSE_LEFT_DBCLK, //MAXT增加左双击消息
 } mfb_mouse_button;
 #define MOUSE_LEFT   MOUSE_BTN_1
 #define MOUSE_RIGHT  MOUSE_BTN_2
